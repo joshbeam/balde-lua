@@ -13,11 +13,10 @@ lua.init(client);
  * thing:3
  */
 
-var hashMaps = lua.join('ids', 'thing');
-
-/**
- * This will return the hashes thing:1, thing:2, and thing:3
- */
-console.log(hashMaps);
-
-client.quit();
+lua.join(['ids', 'thing', 2], function(err, res) {
+  /**
+   * This will return the hashes thing:3, and thing:2
+   */
+  console.log(res);
+  client.quit();
+});
