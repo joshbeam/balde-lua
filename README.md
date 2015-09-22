@@ -19,7 +19,11 @@ var client = redis.createClient();
 
 lua.init(client);
 
-var hashMaps = lua.join('ids', 'things');
+lua.join(['ids', 'things'], function(err, res) {
+  console.log(res);
+
+  client.quit();
+});
 ```
 
 ## Docs
@@ -58,12 +62,15 @@ lua.init(client);
  * things:3
  */
 
-var hashMaps = lua.join('ids', 'things');
-
 /**
  * This will return the hashes things:1, things:2, and things:3
  */
-console.log(hashMaps);
+
+lua.join(['ids', 'things'], function(err, res) {
+  console.log(res);
+
+  client.quit();
+});
 ```
 
 This will return hashes `things:*`, where each `things:*` has an ID from the list of `ids` with a limit of `5`.
