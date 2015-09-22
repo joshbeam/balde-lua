@@ -1,4 +1,4 @@
-# balde-lua
+# :honey_pot: moon-bucket :last_quarter_moon_with_face:
 
 A bucket of <a href="https://www.redisgreen.net/blog/intro-to-lua-for-redis-programmers/">Lua scripts for Redis</a>.
 
@@ -7,13 +7,19 @@ A bucket of <a href="https://www.redisgreen.net/blog/intro-to-lua-for-redis-prog
 Shell:
 
 ```bash
-redis-cli eval "$(cat one-of-the-scripts.lua)" [args]
+redis-cli eval "$(cat scripts/join.lua)" [args]
 ```
 
 <a href="https://github.com/NodeRedis/node_redis">node-redis</a>
 
 ```javascript
-client.eval(['cat one-of-the-scripts.lua', [...args]], [callback]);
+var lua = require('moon-bucket');
+var redis = require('redis');
+var client = redis.createClient();
+
+lua.init(client);
+
+var hashMaps = lua.join('ids', 'things');
 ```
 
 ## Docs
@@ -26,10 +32,38 @@ This script lets us get hashes by their id.
 
 Prereqs: our hashes must be namespaced `namespace:*`, where `namespace` is our namespace (for example, `cars`), and `*` is an inremental id (which resides in a foreign list of ids, such as `1 2 3 4 5` etc.)
 
+Shell:
+
 ```
 # redis-cli eval "$(cat scripts/join.lua)" [2|3] [foreign-key] [namespace] [optional limit]
 
 redis-cli eval "$(cat scripts/join.lua)" 3 ids things 5
+```
+
+JavaScript:
+
+```
+var lua = require('./index.js');
+var redis = require('redis');
+var client = redis.createClient();
+
+lua.init(client);
+
+/**
+ * This example requires that there exists an "ids" list of `1, 2, 3`
+ * and 3 hashmaps --
+ *
+ * things:1
+ * things:2
+ * things:3
+ */
+
+var hashMaps = lua.join('ids', 'things');
+
+/**
+ * This will return the hashes things:1, things:2, and things:3
+ */
+console.log(hashMaps);
 ```
 
 This will return hashes `things:*`, where each `things:*` has an ID from the list of `ids` with a limit of `5`.
