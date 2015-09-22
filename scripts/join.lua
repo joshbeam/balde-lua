@@ -1,5 +1,4 @@
 local a = KEYS[3] or 1;
-print(a)
 local ids = redis.call('lrange', KEYS[1], 0, -1)
 local len = table.getn(ids)
 

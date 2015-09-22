@@ -34,6 +34,18 @@ redis-cli eval "$(cat scripts/join.lua)" 3 ids things 5
 
 This will return hashes `things:*`, where each `things:*` has an ID from the list of `ids` with a limit of `5`.
 
+This would return 5 of our hashes, looking like this (maybe JSON, if we're using node.js):
+
+```
+{
+  "hello": "world",
+  "some_other": "property",
+  "_key": "things:1"
+}
+```
+
+As you can see, a property called `_key` gets automatically embedded into the hash when it is returned to us so we know to which key this object belongs.
+
 Just want to get all of the hashes?
 
 ```
