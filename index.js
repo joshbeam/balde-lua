@@ -1,4 +1,5 @@
 var fs = require('fs');
+var scripts = require('./sha');
 var client;
 
 module.exports = {
@@ -26,7 +27,8 @@ function join(args, callback) {
 
   if(client) {
     fs.readFile('./scripts/join.lua', 'utf8', function(err, script) {
-      client.eval([script, numKeys, keys, hashNamespace, limit], function(err, res) {
+      console.log(scripts['join']);
+      client.evalsha([scripts['join'], numKeys, keys, hashNamespace, limit], function(err, res) {
         var reply;
 
         if(res) {

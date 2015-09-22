@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+
+var fs = require('fs');
+var c = require('crypto');
+
+var scripts = fs.readdirSync('./scripts');
+var shaRaw = './sha/sha';
+var shaIndex = './sha/index.js';
+
+fs.writeFileSync(shaIndex, 'module.exports = {\n');
+
+// reset contents of shaRaw
+fs.truncateSync(shaRaw, 0);
+
+scripts.forEach(function(script, i) {
+  var file = fs.readFileSync('./scripts/' + script, 'utf8');
+  var hash = c.createHash('sha1').update(file).digest('hex');
+  var keyValuePair = [
+    '  "',
+    script.split('.lua').shift(),
+    '":"',
+    hash,
+    '"',
+    i === scripts.length - 1 ? '' : ',',
+    '\n'
+  ].join('');
+
+  fs.appendFileSync(shaRaw, hash + '\n');
+  fs.appendFileSync(shaIndex, keyValuePair);
+});
+
+fs.appendFileSync(shaIndex, '};\n');

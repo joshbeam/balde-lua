@@ -88,6 +88,21 @@ redis-cli eval "$(cat scripts/join.lua)" 2 ids things
 
 By default, our limit is `-1`, which is the last item in the list.
 
+## Technical stuff
+
+Internally when using node.js to call any of the methods available (like `join`), we're actually calling node redis' `evalsha` method on the corresponding sha1 hash in `/sha/index.js`. This is more performant, because we don't have to actually read any files from the file system (in other words, we never make a call to read anything from the `scripts` directory directly; instead, we just make redis evaluate the sha1 hash of the script). So, `moonBucket.join(/* args */)` actually calls something like `redis-cli evalsha b0eff2712326fb5b1cda561a013a0fcc16cb8d85 [...args]`:
+
+```
+// ./sha/index.js
+
+module.exports = {
+  // this is the hash of the corresponding lua script
+  "join":"b0eff2712326fb5b1cda561a013a0fcc16cb8d85"
+};
+```
+
+If you want to add your own script to `scripts`, you'll need to implement the method in `./index.js` and then run `./.bin/compile-sha` in order to re-create the sha map.
+
 ## What's in a name?
 
 "Lua" is the name of the scripting language, and the portuguese word for "moon". "Balde lua" means moon bucket.
