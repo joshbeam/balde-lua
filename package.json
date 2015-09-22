@@ -1,6 +1,6 @@
 {
   "name": "moon-bucket",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A bucket of Lua scripts for Redis",
   "main": "index.js",
   "scripts": {
