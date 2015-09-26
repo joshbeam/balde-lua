@@ -1,6 +1,6 @@
 -- gets hashes by a foreign key list
 
-local limit = KEYS[3] or 0
+local limit = tonumber(ARGV[1]) or 0
 local ids = redis.call('lrange', KEYS[1], 0, limit - 1)
 local len = table.getn(ids)
 
