@@ -41,7 +41,7 @@ Shell:
 ```
 # redis-cli eval "$(cat scripts/join.lua)" [2|3] [foreign-key] [namespace] [optional limit]
 
-redis-cli eval "$(cat scripts/join.lua)" 3 ids things 5
+redis-cli eval "$(cat scripts/join.lua)" 2 ids things 5
 ```
 
 JavaScript:
