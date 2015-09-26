@@ -2,7 +2,7 @@
 
 local limit = KEYS[3] or 0
 local ids = redis.call('lrange', KEYS[1], 0, limit - 1)
-local len = table.getn(ids)
+local len = #ids
 
 local hashes = {}
 
